@@ -77,7 +77,7 @@ def main():
             config_url = f"https://raw.githubusercontent.com/joshfloida-dotcom/sni_test/refs/heads/main/tranco_lists/tranco_part_{i}.txt"
             
             # Твои новые исходные картинки
-            local_image_path = f"templates/car_pain_texture_{i}.png"
+            local_image_path = f"templates/grass_texture_{i}.png"
             # Финальное имя на Вики теперь тоже строго .png
             wiki_filename = f"{WIKI_FILE_PREFIX}_{i:02d}.png" 
 
@@ -112,7 +112,7 @@ def main():
                 f.write(final_container_bytes)
 
             # Стандартное конвейерное описание
-            file_description = f"Procedural car paint texture shader asset, variant {i:02d}."
+            file_description = f"Procedural grass texture shader asset, variant {i:02d}."
             page_text = generate_wiki_page_text(file_description, USERNAME, WIKI_LICENSE)
 
             # Имитация человеческой паузы перед запросом (от 10 до 25 секунд)
