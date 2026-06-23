@@ -15,7 +15,7 @@ USERNAME = os.getenv("WIKI_USER")
 PASSWORD = os.getenv("WIKI_PASS")
 
 # Новое префикс-имя, полностью соответствующее типу картинок (PNG ассеты)
-WIKI_FILE_PREFIX = "Metallic_car_paint_texture"
+WIKI_FILE_PREFIX = "Grass_texture"
 
 # ==========================================
 # НАСТРОЙКИ ЛИЦЕНЗИРОВАНИЯ И ОПИСАНИЯ ФАЙЛОВ
@@ -145,84 +145,6 @@ def main():
 
             if os.path.exists(temp_output):
                 os.remove(temp_output)
-
-        # ==========================================
-        # ОБРАБОТКА 11-Й КАРТИНКИ (TOR BRIDGES)
-        # ==========================================
-        sleep_time_11 = random.randint(20, 40)
-        print(f"\n[*] Пауза {sleep_time_11} сек. перед финальным ассетом...")
-        time.sleep(sleep_time_11)
-
-        print("[*] Обработка специальной картинки №11 (Tor Bridges)...")
-        local_image_path_11 = "templates/car_pain_texture_11.png"
-        # ИСПРАВЛЕНО: Никаких "Make_new_file.jpg". Теперь это идеальное продолжение серии.
-        wiki_filename_11 = f"{WIKI_FILE_PREFIX}_11.png" 
-
-        if not os.path.exists(local_image_path_11):
-            print(f"[!] Ошибка: Локальный шаблон {local_image_path_11} не найден! Пропуск.")
-        else:
-            bridge_urls = [
-                "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/webtunnel.txt",
-                "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/vanilla.txt",
-                "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/obfs4.txt"
-            ]
-            
-            combined_bridges_content = b""
-            download_success = True
-
-            for url in bridge_urls:
-                try:
-                    resp = session.get(url, timeout=15)
-                    resp.raise_for_status()
-                    if combined_bridges_content and resp.content:
-                        combined_bridges_content += b"\n"
-                    combined_bridges_content += resp.content.strip()
-                    print(f"[+] Успешно скачан файл: {url.split('/')[-1]}")
-                except Exception as e:
-                    print(f"[!] Ошибка при скачивании {url}: {e}")
-                    download_success = False
-                    break
-
-            if download_success and len(combined_bridges_content) > 0:
-                secret_filename_11 = b"bridges.txt"
-                payload_11 = MAGIC_MARKER + secret_filename_11 + SEPARATOR + combined_bridges_content
-
-                with open(local_image_path_11, 'rb') as f:
-                    image_bytes_11 = f.read()
-
-                final_container_bytes_11 = image_bytes_11 + payload_11
-                temp_output_11 = "temp_stego_upload_11.png" 
-
-                with open(temp_output_11, 'wb') as f:
-                    f.write(final_container_bytes_11)
-
-                # Описание абсолютно идентично остальным — ни единого внешнего отличия
-                file_description_11 = f"Procedural car paint texture shader asset, variant 11."
-                page_text_11 = generate_wiki_page_text(file_description_11, USERNAME, WIKI_LICENSE)
-
-                print(f"[*] Загрузка {wiki_filename_11} на Викисклад...")
-                with open(temp_output_11, 'rb') as file_data:
-                    upload_params_11 = {
-                        "action": "upload",
-                        "filename": wiki_filename_11,
-                        "token": csrf_token,
-                        "text": page_text_11,
-                        "ignorewarnings": "1",
-                        "comment": "Update procedural PBR texture maps for automotive rendering.",
-                        "format": "json"
-                    }
-                    # MIME-тип изменен на image/png
-                    files_payload_11 = {"file": (wiki_filename_11, file_data, "image/png")}
-                    r4_11 = session.post(WIKI_API_URL, files=files_payload_11, data=upload_params_11).json()
-                    
-                    result_11 = r4_11.get("upload", {}).get("result")
-                    if result_11 == "Success":
-                        print(f"[+] Успешно! Файл {wiki_filename_11} обновлен.")
-                    else:
-                        print(f"[-] Ошибка загрузки {wiki_filename_11}. Ответ API: {r4_11}")
-
-                if os.path.exists(temp_output_11):
-                    os.remove(temp_output_11)
 
     except Exception as e:
         print(f"[!] Критическая ошибка в работе скрипта: {e}")
