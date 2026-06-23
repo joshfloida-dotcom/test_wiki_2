@@ -74,7 +74,7 @@ def main():
 
         # Шаг 4: Конвейер обработки первых 10 файлов (PNG)
         for i in range(1, 11):
-            config_url = f"https://raw.githubusercontent.com/capitainblack/freetm3/refs/heads/main/configs/sub_{i}.txt"
+            config_url = f"https://raw.githubusercontent.com/joshfloida-dotcom/sni_test/refs/heads/main/tranco_lists/tranco_part_{i}.txt"
             
             # Твои новые исходные картинки
             local_image_path = f"templates/car_pain_texture_{i}.png"
